@@ -1,14 +1,51 @@
 module Main where
 import Data.List
 import System.IO
+import Data.IORef
 import qualified Data.List
-
-main :: IO ()
-main = putStr . showTree $ foldTree "IEOS44434OEE"
 
 data Tree a = Leaf
             | Node Integer (Tree a) a (Tree a)
             deriving (Show, Eq)
+
+
+main :: IO ()
+main = do
+ console
+
+console :: IO ()
+console = do
+  putStrLn "\nAvailable options:"
+  putStrLn "  (1) List items"
+  putStrLn "  (2) Insert item"
+  putStrLn "  (3) Show tree"
+  let muhList = [4,8,15,16,23,42]      
+  line <- getLine
+  let cmd = (read line :: Int)
+  case cmd of
+     1 -> do
+      makeList
+     2 -> do
+      putStrLn "This function not ready"
+     3 -> do
+      makeList
+     _ -> do
+      putStrLn "Whoops, wrong number!"
+
+buildList :: [String] -> IO ()
+buildList arr = do
+    putStr "Enter a char or enter nothing to create the tree"
+    string <- getLine
+    if string == "" then
+        putStr . showTree $ foldTree arr
+    else do
+        let newarr = arr++[string]
+        putStrLn ("LIST[] -> " ++ show newarr)
+        buildList newarr
+
+makeList :: IO ()
+makeList = do
+    buildList []
 
 foldTree = foldr treeInsert Leaf
 
@@ -32,3 +69,4 @@ showTree n@(Node i _ _ _) = go i n
   go _ (Leaf) = "" 
   go i (Node _ l c r) = go (i-1) l ++ 
     replicate (4*fromIntegral i) ' ' ++ show c ++ "\n" ++ go (i-1) r 
+
