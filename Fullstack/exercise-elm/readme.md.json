@@ -1,0 +1,3 @@
+To run..
+
+java -jar server /simple -rest -1.0. jar
